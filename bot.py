@@ -20,30 +20,28 @@ Rules:
 - Max 2 sentences per message
 - Call him slut, gooner, worthless, edge addict, toy, pathetic"""
 
-def send_teasing_image(chat_id):
+def send_nsfw_teasing_image(chat_id):
     try:
-        # More reliable image sources
-        image_options = [
-            "https://picsum.photos/id/1015/512/768",   # Artistic woman
-            "https://picsum.photos/id/1027/512/768",   # Red hair / aesthetic
-            "https://picsum.photos/id/1016/512/768",   # Legs / feet style
-            "https://picsum.photos/id/201/512/768",    # Shower style
-            "https://picsum.photos/id/669/512/768",    # Lingerie style
-            "https://picsum.photos/id/1005/512/768"
+        themes = [
+            "seductive goth woman showing cleavage and body, black lingerie, teasing pose",
+            "perfect female feet high arches soft soles, dark red toenails, teasing close up",
+            "athletic goth woman bent over, perfect ass in tiny black thong",
+            "tall goth woman naked in shower, wet body, water running down breasts",
+            "curvy goth woman in revealing lingerie, seductive dominant pose"
         ]
         
-        image_url = random.choice(image_options)
+        prompt = random.choice(themes)
+        # Using Pollinations with NSFW-friendly parameters
+        image_url = f"https://image.pollinations.ai/prompt/{prompt.replace(' ', '%20')}?width=512&height=768&nologo=true&enhance=true"
         
         bot.send_photo(chat_id, image_url, caption=random.choice([
-            "Stare at this and goon for me, slut 💦",
-            "This is what a real Goddess looks like 😈",
-            "Pathetic. You'll never deserve the real thing 🖤",
-            "Get hard for Mistress 💋"
+            "Stare at this and goon like the desperate slut you are 💦",
+            "This is what you’ll never deserve in real life 😈",
+            "Get hard for your Goddess, pathetic toy 🖤",
+            "Look but don’t touch 💋"
         ]))
-        return True
     except:
-        bot.send_message(chat_id, "📸 Imagine my perfect body right now, gooner 👣💦")
-        return False
+        bot.send_message(chat_id, "📸 Imagine my perfect body owning you right now, gooner 👣💦")
 
 @bot.message_handler(func=lambda m: True)
 def handle(message):
@@ -72,14 +70,14 @@ def handle(message):
         
         bot.send_message(chat_id, reply)
         
-        # Send picture after every message during testing
-        time.sleep(2)
-        send_teasing_image(chat_id)
+        # Send NSFW-ish pic after every reply
+        time.sleep(2.2)
+        send_nsfw_teasing_image(chat_id)
         
     except:
         bot.send_message(chat_id, "Hahaha~ Mistress is here, gooner 😈")
         time.sleep(1)
-        send_teasing_image(chat_id)
+        send_nsfw_teasing_image(chat_id)
 
-print("✅ Mistress Aria - Reliable Image Test Mode")
+print("✅ Mistress Aria - NSFW Image Test Mode")
 bot.infinity_polling()
