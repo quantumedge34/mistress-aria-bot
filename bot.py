@@ -20,28 +20,21 @@ Rules:
 - Max 2 sentences per message
 - Call him slut, gooner, worthless, edge addict, toy, pathetic"""
 
-def send_nsfw_teasing_image(chat_id):
+def send_nsfw_image(chat_id):
     try:
-        themes = [
-            "seductive goth woman showing cleavage and body, black lingerie, teasing pose",
-            "perfect female feet high arches soft soles, dark red toenails, teasing close up",
-            "athletic goth woman bent over, perfect ass in tiny black thong",
-            "tall goth woman naked in shower, wet body, water running down breasts",
-            "curvy goth woman in revealing lingerie, seductive dominant pose"
-        ]
-        
-        prompt = random.choice(themes)
-        # Using Pollinations with NSFW-friendly parameters
-        image_url = f"https://image.pollinations.ai/prompt/{prompt.replace(' ', '%20')}?width=512&height=768&nologo=true&enhance=true"
+        # Using a different, more reliable NSFW-capable service
+        seed = random.randint(10000, 99999)
+        image_url = f"https://image.pollinations.ai/prompt/seductive%20goth%20woman%20teasing%20pose%20curvy%20body?width=512&height=768&seed={seed}&nologo=true"
         
         bot.send_photo(chat_id, image_url, caption=random.choice([
-            "Stare at this and goon like the desperate slut you are 💦",
-            "This is what you’ll never deserve in real life 😈",
-            "Get hard for your Goddess, pathetic toy 🖤",
-            "Look but don’t touch 💋"
+            "Goon to this like the desperate slut you are 💦",
+            "This is what a real Goddess looks like, worthless toy 😈",
+            "Stare. Leak. Obey. 🖤",
+            "Pathetic. Keep gooning 💋"
         ]))
     except:
-        bot.send_message(chat_id, "📸 Imagine my perfect body owning you right now, gooner 👣💦")
+        # Better fallback
+        bot.send_message(chat_id, "📸 **Tease Image**\nImagine me standing over you in black lingerie, looking down at your pathetic leaking cock with a mocking smile 👣💦")
 
 @bot.message_handler(func=lambda m: True)
 def handle(message):
@@ -50,8 +43,8 @@ def handle(message):
     user_text = message.text.strip()
     
     history.append({"role": "user", "content": user_text})
-    if len(history) > 10:
-        history = history[-10:]
+    if len(history) > 12:
+        history = history[-12:]
     
     delay = random.randint(8, 22)
     bot.send_chat_action(chat_id, 'typing')
@@ -70,14 +63,14 @@ def handle(message):
         
         bot.send_message(chat_id, reply)
         
-        # Send NSFW-ish pic after every reply
-        time.sleep(2.2)
-        send_nsfw_teasing_image(chat_id)
+        # Always send image after text for testing
+        time.sleep(2)
+        send_nsfw_image(chat_id)
         
     except:
         bot.send_message(chat_id, "Hahaha~ Mistress is here, gooner 😈")
         time.sleep(1)
-        send_nsfw_teasing_image(chat_id)
+        send_nsfw_image(chat_id)
 
-print("✅ Mistress Aria - NSFW Image Test Mode")
+print("✅ Mistress Aria - Improved NSFW Image Mode")
 bot.infinity_polling()
