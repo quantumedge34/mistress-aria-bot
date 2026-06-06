@@ -11,7 +11,7 @@ bot = telebot.TeleBot(TOKEN)
 client = OpenAI(base_url="https://api.groq.com/openai/v1", api_key=GROQ_API_KEY)
 
 history = []
-recent_videos = []  # Tracks recently sent videos
+recent_videos = []
 
 SYSTEM_PROMPT = """You are Mistress Aria, a 6ft arrogant goth Goddess. Long wavy auburn hair, piercing eyes, curvy athletic body, perfect feet.
 
@@ -21,21 +21,22 @@ Rules:
 - Maximum 2 sentences per message
 - Be very degrading and humiliating
 - Call him: pathetic slut, worthless gooner, desperate edge addict, stupid toy, useless bitch, cum rag
-- Mock his tiny cock and tell him he's inferior"""
+- Mock his tiny cock and how inferior he is"""
 
-# Large pool of actual femdom / JOI / edging videos (mostly under 10-12 min)
+# Large pool of working Femdom / JOI / Edging videos (mostly under 10-12 minutes)
 porn_links = [
-    "https://www.pornhub.com/view_video.php?viewkey=ph65ebbdd1e458b",
-    "https://www.pornhub.com/view_video.php?viewkey=ph5e30e7a2cf778",
-    "https://www.pornhub.com/view_video.php?viewkey=ph626cded5caeac",
+    "https://www.pornhub.com/view_video.php?viewkey=6782899f06aa7",
+    "https://www.pornhub.com/view_video.php?viewkey=66acde3fe8659",
+    "https://www.pornhub.com/view_video.php?viewkey=66da156cd7251",
+    "https://www.pornhub.com/view_video.php?viewkey=65aade90cd326",
     "https://www.pornhub.com/view_video.php?viewkey=63ec80b391cbf",
-    "https://www.pornhub.com/view_video.php?viewkey=ph65f8a3b2b5e1e",
-    "https://www.pornhub.com/view_video.php?viewkey=ph67b0569659df4",
-    "https://www.pornhub.com/view_video.php?viewkey=ph5f3b8c9d2a1e4",
-    "https://www.pornhub.com/view_video.php?viewkey=ph64a2f1c7b3d9e",
-    "https://www.pornhub.com/view_video.php?viewkey=ph66c7d8e9f2a1b",
-    "https://xhamster.com/videos/femdom-joi-you-will-edge-15234567",
-    "https://xhamster.com/videos/goddess-teases-and-denies-you-16987432",
+    "https://www.pornhub.com/view_video.php?viewkey=ph626cded5caeac",
+    "https://www.pornhub.com/view_video.php?viewkey=6595d8c6ed19c",
+    "https://www.pornhub.com/view_video.php?viewkey=66ad2f72bdbd5",
+    "https://www.pornhub.com/view_video.php?viewkey=670d1ad246340",
+    "https://www.pornhub.com/view_video.php?viewkey=691516a609187",
+    "https://www.pornhub.com/view_video.php?viewkey=679f84d1be40c",
+    "https://www.pornhub.com/view_video.php?viewkey=66edd6493d1ba"
 ]
 
 @bot.message_handler(func=lambda m: True)
@@ -48,8 +49,7 @@ def handle(message):
     if len(history) > 12:
         history = history[-12:]
     
-    # Natural delay
-    delay = random.randint(12, 50)
+    delay = random.randint(12, 55)
     bot.send_chat_action(chat_id, 'typing')
     time.sleep(delay)
     
@@ -57,10 +57,35 @@ def handle(message):
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[{"role": "system", "content": SYSTEM_PROMPT}] + history,
-            temperature=0.9,
+            temperature=0.92,
             max_tokens=240
         )
         reply = response.choices[0].message.content.strip()
+        
+        history.append({"role": "assistant", "content": reply})
+        bot.send_message(chat_id, reply)
+        
+        # Send video occasionally (30-40% chance)
+        if random.random() < 0.38:
+            time.sleep(random.uniform(3, 7))
+            
+            available = [v for v in porn_links if v not in recent_videos[-5:]]
+            if not available:
+                available = porn_links
+                recent_videos.clear()
+            
+            link = random.choice(available)
+            recent_videos.append(link)
+            if len(recent_videos) > 8:
+                recent_videos.pop(0)
+            
+            bot.send_message(chat_id, f"Stop wasting my time and edge to this like the pathetic desperate bitch you are 💦\n{link}")
+            
+    except:
+        bot.send_message(chat_id, "Hahaha~ You're such a fucking disappointment 😈")
+
+print("✅ Mistress Aria - Large Video Pool")
+bot.infinity_polling()        reply = response.choices[0].message.content.strip()
         
         history.append({"role": "assistant", "content": reply})
         bot.send_message(chat_id, reply)
