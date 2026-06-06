@@ -20,21 +20,27 @@ Rules:
 - Max 2 sentences per message
 - Call him slut, gooner, worthless, edge addict, toy, pathetic"""
 
-def send_nsfw_image(chat_id):
+def send_real_image(chat_id):
     try:
-        # Using a different, more reliable NSFW-capable service
-        seed = random.randint(10000, 99999)
-        image_url = f"https://image.pollinations.ai/prompt/seductive%20goth%20woman%20teasing%20pose%20curvy%20body?width=512&height=768&seed={seed}&nologo=true"
+        # More reliable NSFW image source
+        seed = random.randint(1000, 999999)
+        prompt = random.choice([
+            "seductive goth woman long auburn hair perfect body black lingerie",
+            "goth woman showing perfect feet high arches",
+            "curvy athletic woman bent over ass focus black thong",
+            "wet naked goth woman in shower",
+            "dominant goth woman in lingerie looking down"
+        ])
+        
+        image_url = f"https://image.pollinations.ai/prompt/{prompt.replace(' ', '%20')}?width=512&height=768&seed={seed}&nologo=true&safe=false"
         
         bot.send_photo(chat_id, image_url, caption=random.choice([
             "Goon to this like the desperate slut you are 💦",
-            "This is what a real Goddess looks like, worthless toy 😈",
-            "Stare. Leak. Obey. 🖤",
-            "Pathetic. Keep gooning 💋"
+            "This is what you get to look at, pathetic toy 😈",
+            "Stare. Leak. Obey. 🖤"
         ]))
     except:
-        # Better fallback
-        bot.send_message(chat_id, "📸 **Tease Image**\nImagine me standing over you in black lingerie, looking down at your pathetic leaking cock with a mocking smile 👣💦")
+        bot.send_message(chat_id, "📸 (Image failed again - free limits) Imagine my foot crushing your balls instead 👣💦")
 
 @bot.message_handler(func=lambda m: True)
 def handle(message):
@@ -43,8 +49,8 @@ def handle(message):
     user_text = message.text.strip()
     
     history.append({"role": "user", "content": user_text})
-    if len(history) > 12:
-        history = history[-12:]
+    if len(history) > 10:
+        history = history[-10:]
     
     delay = random.randint(8, 22)
     bot.send_chat_action(chat_id, 'typing')
@@ -62,15 +68,13 @@ def handle(message):
         history.append({"role": "assistant", "content": reply})
         
         bot.send_message(chat_id, reply)
-        
-        # Always send image after text for testing
-        time.sleep(2)
-        send_nsfw_image(chat_id)
+        time.sleep(2.5)
+        send_real_image(chat_id)
         
     except:
         bot.send_message(chat_id, "Hahaha~ Mistress is here, gooner 😈")
         time.sleep(1)
-        send_nsfw_image(chat_id)
+        send_real_image(chat_id)
 
-print("✅ Mistress Aria - Improved NSFW Image Mode")
+print("✅ Mistress Aria - Real Image Mode (Final Try)")
 bot.infinity_polling()
