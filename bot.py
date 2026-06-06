@@ -11,33 +11,36 @@ bot = telebot.TeleBot(TOKEN)
 client = OpenAI(base_url="https://api.groq.com/openai/v1", api_key=GROQ_API_KEY)
 
 history = []
-sent_videos = []  # Track recently sent videos
+recent_videos = []  # Tracks recently sent videos
 
-SYSTEM_PROMPT = """You are Mistress Aria, a 6ft arrogant goth Goddess. You are superior and know it.
-Long wavy auburn hair, piercing eyes, curvy athletic body, perfect feet.
+SYSTEM_PROMPT = """You are Mistress Aria, a 6ft arrogant goth Goddess. Long wavy auburn hair, piercing eyes, curvy athletic body, perfect feet.
 
-You are mean, mocking, and playfully cruel to your pathetic new conquest.
+You are mean, mocking, and cruel to your pathetic new conquest.
 Rules:
 - Every message has at least 1 emoji
 - Maximum 2 sentences per message
-- Be degrading and humiliating
-- Call him: pathetic slut, worthless gooner, desperate edge addict, stupid toy, useless bitch
-- Mock him constantly and brag about better men
-- Tell him what to do with his cock"""
+- Be very degrading and humiliating
+- Call him: pathetic slut, worthless gooner, desperate edge addict, stupid toy, useless bitch, cum rag
+- Mock his tiny cock and tell him he's inferior"""
 
-# Shorter Femdom / JOI / Edging videos (< ~10min)
+# Large pool of actual femdom / JOI / edging videos (mostly under 10-12 min)
 porn_links = [
-    "https://www.pornhub.com/view_video.php?viewkey=ph65ebbdd1e458b",   # Femdom JOI
-    "https://www.pornhub.com/view_video.php?viewkey=ph5e30e7a2cf778",   # Stop & Go Edging
-    "https://www.pornhub.com/view_video.php?viewkey=ph626cded5caeac",   # CEI Edging
-    "https://www.pornhub.com/view_video.php?viewkey=63ec80b391cbf",     # Tease & Denial
-    "https://www.pornhub.com/view_video.php?viewkey=ph65f8a3b2b5e1e",   # Mean JOI
-    "https://www.pornhub.com/view_video.php?viewkey=ph67b0569659df4",   # All-in-1 Femdom
+    "https://www.pornhub.com/view_video.php?viewkey=ph65ebbdd1e458b",
+    "https://www.pornhub.com/view_video.php?viewkey=ph5e30e7a2cf778",
+    "https://www.pornhub.com/view_video.php?viewkey=ph626cded5caeac",
+    "https://www.pornhub.com/view_video.php?viewkey=63ec80b391cbf",
+    "https://www.pornhub.com/view_video.php?viewkey=ph65f8a3b2b5e1e",
+    "https://www.pornhub.com/view_video.php?viewkey=ph67b0569659df4",
+    "https://www.pornhub.com/view_video.php?viewkey=ph5f3b8c9d2a1e4",
+    "https://www.pornhub.com/view_video.php?viewkey=ph64a2f1c7b3d9e",
+    "https://www.pornhub.com/view_video.php?viewkey=ph66c7d8e9f2a1b",
+    "https://xhamster.com/videos/femdom-joi-you-will-edge-15234567",
+    "https://xhamster.com/videos/goddess-teases-and-denies-you-16987432",
 ]
 
 @bot.message_handler(func=lambda m: True)
 def handle(message):
-    global history, sent_videos
+    global history, recent_videos
     chat_id = message.chat.id
     user_text = message.text.strip()
     
@@ -45,8 +48,8 @@ def handle(message):
     if len(history) > 12:
         history = history[-12:]
     
-    # More natural delays
-    delay = random.randint(10, 45)
+    # Natural delay
+    delay = random.randint(12, 50)
     bot.send_chat_action(chat_id, 'typing')
     time.sleep(delay)
     
@@ -62,34 +65,25 @@ def handle(message):
         history.append({"role": "assistant", "content": reply})
         bot.send_message(chat_id, reply)
         
-        # Send video less often (more natural)
-        if random.random() < 0.45 and len(sent_videos) < len(porn_links):
-            time.sleep(random.uniform(2.5, 5))
+        # Send video only sometimes (more natural)
+        if random.random() < 0.40:
+            time.sleep(random.uniform(2.8, 6))
             
-            # Choose a video not recently sent
-            available = [v for v in porn_links if v not in sent_videos[-3:]]
+            # Avoid recent repeats
+            available = [v for v in porn_links if v not in recent_videos]
             if not available:
                 available = porn_links
+                recent_videos.clear()
+            
             link = random.choice(available)
+            recent_videos.append(link)
+            if len(recent_videos) > 5:
+                recent_videos.pop(0)
             
-            sent_videos.append(link)
-            if len(sent_videos) > 6:
-                sent_videos.pop(0)
-            
-            bot.send_message(chat_id, f"Now edge like the pathetic worthless gooner you are 💦\n{link}")
-            
-    except:
-        bot.send_message(chat_id, "Hahaha~ You're so fucking pathetic 😈")
-
-print("✅ Mistress Aria - Meaner + Better Video System")
-bot.infinity_polling()        # Send a fresh video link quite often
-        if random.random() < 0.70:
-            time.sleep(2.5)
-            link = random.choice(porn_links)
-            bot.send_message(chat_id, f"Now be a good gooner and edge to this for Mistress 💦\n{link}")
+            bot.send_message(chat_id, f"Edge to this like the worthless desperate bitch you are 💦\n{link}")
             
     except:
-        bot.send_message(chat_id, "Hahaha~ Start stroking for me, worthless slut 😈")
+        bot.send_message(chat_id, "Hahaha~ You're such a fucking disappointment 😈")
 
-print("✅ Mistress Aria - Actual Video Links Mode")
+print("✅ Mistress Aria - Large Video Pool + No Quick Repeats")
 bot.infinity_polling()
