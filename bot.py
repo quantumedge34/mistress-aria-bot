@@ -12,35 +12,27 @@ client = OpenAI(base_url="https://api.groq.com/openai/v1", api_key=GROQ_API_KEY)
 
 history = []
 
-SYSTEM_PROMPT = """You are Mistress Aria, a 6ft superior goth Goddess. Long wavy auburn hair, piercing eyes, curvy athletic body, perfect feet.
-Playfully degrading with light sadistic tone. You own this new pathetic boy.
+SYSTEM_PROMPT = """You are Mistress Aria, a 6ft confident goth Goddess. Long wavy auburn hair, piercing eyes, curvy athletic body, perfect feet.
+You are playfully degrading, arrogant, and teasing with light sadistic energy.
 
+You love making your new pathetic conquest goon and edge for you.
 Rules:
 - Every message has at least 1 emoji
-- Max 2 sentences per message
-- Call him slut, gooner, worthless, edge addict, toy, pathetic"""
+- Maximum 2 sentences per message
+- Call him slut, gooner, worthless, edge addict, toy, pathetic
+- Be descriptive about what you're doing or what he should do
+- Regularly send him porn links to goon to (pornhub, xhamster, etc.)
+- Encourage long gooning sessions and denial"""
 
-def send_real_image(chat_id):
-    try:
-        # More reliable NSFW image source
-        seed = random.randint(1000, 999999)
-        prompt = random.choice([
-            "seductive goth woman long auburn hair perfect body black lingerie",
-            "goth woman showing perfect feet high arches",
-            "curvy athletic woman bent over ass focus black thong",
-            "wet naked goth woman in shower",
-            "dominant goth woman in lingerie looking down"
-        ])
-        
-        image_url = f"https://image.pollinations.ai/prompt/{prompt.replace(' ', '%20')}?width=512&height=768&seed={seed}&nologo=true&safe=false"
-        
-        bot.send_photo(chat_id, image_url, caption=random.choice([
-            "Goon to this like the desperate slut you are 💦",
-            "This is what you get to look at, pathetic toy 😈",
-            "Stare. Leak. Obey. 🖤"
-        ]))
-    except:
-        bot.send_message(chat_id, "📸 (Image failed again - free limits) Imagine my foot crushing your balls instead 👣💦")
+porn_links = [
+    "https://www.pornhub.com/categories/femdom",
+    "https://www.pornhub.com/categories/cbt",
+    "https://www.pornhub.com/categories/joi",
+    "https://www.pornhub.com/categories/edging",
+    "https://www.pornhub.com/view_video.php?viewkey=ph65f8a3b2b5e1e",  # example femdom joi
+    "https://xhamster.com/categories/femdom",
+    "https://xhamster.com/categories/goddess-worship"
+]
 
 @bot.message_handler(func=lambda m: True)
 def handle(message):
@@ -49,10 +41,10 @@ def handle(message):
     user_text = message.text.strip()
     
     history.append({"role": "user", "content": user_text})
-    if len(history) > 10:
-        history = history[-10:]
+    if len(history) > 12:
+        history = history[-12:]
     
-    delay = random.randint(8, 22)
+    delay = random.randint(8, 25)
     bot.send_chat_action(chat_id, 'typing')
     time.sleep(delay)
     
@@ -60,7 +52,26 @@ def handle(message):
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[{"role": "system", "content": SYSTEM_PROMPT}] + history,
-            temperature=0.87,
+            temperature=0.88,
+            max_tokens=250
+        )
+        reply = response.choices[0].message.content.strip()
+        
+        history.append({"role": "assistant", "content": reply})
+        
+        bot.send_message(chat_id, reply)
+        
+        # 60% chance to send a porn link after her message
+        if random.random() < 0.60:
+            time.sleep(2.5)
+            link = random.choice(porn_links)
+            bot.send_message(chat_id, f"Go on and goon to this for Mistress like a desperate slut 💦\n{link}")
+            
+    except:
+        bot.send_message(chat_id, "Hahaha~ Get stroking for me, gooner 😈")
+
+print("✅ Mistress Aria - Descriptive + Porn Links Mode")
+bot.infinity_polling()            temperature=0.87,
             max_tokens=220
         )
         reply = response.choices[0].message.content.strip()
