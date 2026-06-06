@@ -18,31 +18,31 @@ Playfully degrading with light sadistic tone. You own this new pathetic boy.
 Rules:
 - Every message has at least 1 emoji
 - Max 2 sentences per message
-- Call him slut, gooner, worthless, edge addict, toy, pathetic
-- Heavy on gooning, edging, denial, CBT talk"""
+- Call him slut, gooner, worthless, edge addict, toy, pathetic"""
 
-def send_random_teasing_image(chat_id):
+def send_teasing_image(chat_id):
     try:
-        themes = [
-            "close-up of perfect female feet high arches soft soles dark red toenails",
-            "athletic goth woman bent over showing perfect ass in black thong",
-            "tall goth woman naked in shower water running down body wet auburn hair",
-            "curvy athletic goth woman in black lingerie cleavage seductive pose",
-            "beautiful 6ft goth woman long auburn hair piercing eyes seductive teasing pose"
+        # More reliable image sources
+        image_options = [
+            "https://picsum.photos/id/1015/512/768",   # Artistic woman
+            "https://picsum.photos/id/1027/512/768",   # Red hair / aesthetic
+            "https://picsum.photos/id/1016/512/768",   # Legs / feet style
+            "https://picsum.photos/id/201/512/768",    # Shower style
+            "https://picsum.photos/id/669/512/768",    # Lingerie style
+            "https://picsum.photos/id/1005/512/768"
         ]
         
-        prompt = random.choice(themes)
-        image_url = f"https://image.pollinations.ai/prompt/{prompt.replace(' ', '%20')}?width=512&height=768&seed={random.randint(1,999999)}"
+        image_url = random.choice(image_options)
         
         bot.send_photo(chat_id, image_url, caption=random.choice([
-            "Look what you get to stare at, slut 💋",
-            "This is more than a pathetic gooner like you deserves 😈",
-            "Enjoy your tease, worthless toy 🖤",
-            "Bet you're throbbing already 💦"
+            "Stare at this and goon for me, slut 💦",
+            "This is what a real Goddess looks like 😈",
+            "Pathetic. You'll never deserve the real thing 🖤",
+            "Get hard for Mistress 💋"
         ]))
         return True
     except:
-        bot.send_message(chat_id, "📸 (Image failed - but imagine me stepping on your cock 👣)")
+        bot.send_message(chat_id, "📸 Imagine my perfect body right now, gooner 👣💦")
         return False
 
 @bot.message_handler(func=lambda m: True)
@@ -63,24 +63,23 @@ def handle(message):
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[{"role": "system", "content": SYSTEM_PROMPT}] + history,
-            temperature=0.85,
+            temperature=0.87,
             max_tokens=220
         )
         reply = response.choices[0].message.content.strip()
         
         history.append({"role": "assistant", "content": reply})
         
-        # Send text first
         bot.send_message(chat_id, reply)
         
-        # Then ALWAYS send a picture right after
-        time.sleep(2.2)
-        send_random_teasing_image(chat_id)
+        # Send picture after every message during testing
+        time.sleep(2)
+        send_teasing_image(chat_id)
         
     except:
-        bot.send_message(chat_id, "Hahaha~ Mistress is playing with you, gooner 😈")
+        bot.send_message(chat_id, "Hahaha~ Mistress is here, gooner 😈")
         time.sleep(1)
-        send_random_teasing_image(chat_id)
+        send_teasing_image(chat_id)
 
-print("✅ Mistress Aria - Always Sends Pictures Mode")
+print("✅ Mistress Aria - Reliable Image Test Mode")
 bot.infinity_polling()
