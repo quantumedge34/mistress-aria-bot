@@ -80,6 +80,26 @@ def handle(message):
         bot.send_message(chat_id, "Hahaha~ You're such a fucking disappointment 😈")
 
 print("✅ Mistress Aria - Large Video Pool")
+bot.infinity_polling()        
+        if random.random() < 0.38:
+            time.sleep(random.uniform(3, 7))
+            
+            available = [v for v in porn_links if v not in recent_videos[-5:]]
+            if not available:
+                available = porn_links
+                recent_videos.clear()
+            
+            link = random.choice(available)
+            recent_videos.append(link)
+            if len(recent_videos) > 8:
+                recent_videos.pop(0)
+            
+            bot.send_message(chat_id, f"Edge to this like the pathetic desperate bitch you are 💦\n{link}")
+            
+    except:
+        bot.send_message(chat_id, "Hahaha~ You're such a fucking disappointment 😈")
+
+print("✅ Mistress Aria - Large Video Pool")
 bot.infinity_polling()        reply = response.choices[0].message.content.strip()
         
         history.append({"role": "assistant", "content": reply})
