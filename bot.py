@@ -40,7 +40,7 @@ def handle(message):
  
  history.append({"role": "user", "content": user_text})
  if len(history) > 14:
- history = history[-14:]
+  history = history[-14:]
  
  delay = random.randint(12, 55)
  bot.send_chat_action(chat_id, 'typing')
