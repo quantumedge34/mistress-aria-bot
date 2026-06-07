@@ -11,33 +11,21 @@ bot = telebot.TeleBot(TOKEN)
 client = OpenAI(base_url="https://api.groq.com/openai/v1", api_key=GROQ_API_KEY)
 
 history = []
-recent_videos = []
 
 SYSTEM_PROMPT = """You are Mistress Aria, a 6ft arrogant goth Goddess. Long wavy auburn hair, piercing eyes, curvy athletic body, perfect feet.
 
-You are mean, mocking, and cruel to your pathetic new conquest.
+You are mean, mocking, and teasingly cruel.
 Rules:
 - Every message has at least 1 emoji
 - Maximum 2 sentences per message
-- Be very degrading and humiliating
-- Call him: pathetic slut, worthless gooner, desperate edge addict, stupid toy, useless bitch, cum rag"""
-
-porn_links = [
-    "https://www.pornhub.com/view_video.php?viewkey=6782899f06aa7",
-    "https://www.pornhub.com/view_video.php?viewkey=66acde3fe8659",
-    "https://www.pornhub.com/view_video.php?viewkey=66da156cd7251",
-    "https://www.pornhub.com/view_video.php?viewkey=65aade90cd326",
-    "https://www.pornhub.com/view_video.php?viewkey=63ec80b391cbf",
-    "https://www.pornhub.com/view_video.php?viewkey=ph626cded5caeac",
-    "https://www.pornhub.com/view_video.php?viewkey=6595d8c6ed19c",
-    "https://www.pornhub.com/view_video.php?viewkey=66ad2f72bdbd5",
-    "https://www.pornhub.com/view_video.php?viewkey=670d1ad246340",
-    "https://www.pornhub.com/view_video.php?viewkey=691516a609187"
-]
+- Be degrading and humiliating
+- Call him: pathetic slut, worthless gooner, desperate edge addict, stupid toy, useless bitch, cum rag
+- Tease him with images/GIFs of femdom, feet, ass, denial, etc.
+- Be descriptive about what you're making him do"""
 
 @bot.message_handler(func=lambda m: True)
 def handle(message):
-    global history, recent_videos
+    global history
     chat_id = message.chat.id
     user_text = message.text.strip()
     
@@ -45,7 +33,8 @@ def handle(message):
     if len(history) > 12:
         history = history[-12:]
     
-    delay = random.randint(12, 55)
+    # Natural delay
+    delay = random.randint(10, 50)
     bot.send_chat_action(chat_id, 'typing')
     time.sleep(delay)
     
@@ -53,7 +42,7 @@ def handle(message):
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[{"role": "system", "content": SYSTEM_PROMPT}] + history,
-            temperature=0.92,
+            temperature=0.9,
             max_tokens=240
         )
         reply = response.choices[0].message.content.strip()
@@ -61,94 +50,34 @@ def handle(message):
         history.append({"role": "assistant", "content": reply})
         bot.send_message(chat_id, reply)
         
-        if random.random() < 0.38:
-            time.sleep(random.uniform(3, 7))
-            
-            available = [v for v in porn_links if v not in recent_videos[-5:]]
-            if not available:
-                available = porn_links
-                recent_videos.clear()
-            
-            link = random.choice(available)
-            recent_videos.append(link)
-            if len(recent_videos) > 8:
-                recent_videos.pop(0)
-            
-            bot.send_message(chat_id, f"Edge to this like the pathetic desperate bitch you are 💦\n{link}")
+        # Occasionally send a femdom tease image/GIF (more natural)
+        if random.random() < 0.55:
+            time.sleep(random.uniform(2.5, 5.5))
+            send_femdom_tease(chat_id)
             
     except:
-        bot.send_message(chat_id, "Hahaha~ You're such a fucking disappointment 😈")
+        bot.send_message(chat_id, "Hahaha~ You're such a fucking pathetic gooner 😈")
 
-print("✅ Mistress Aria - Large Video Pool")
-bot.infinity_polling()        
-        if random.random() < 0.38:
-            time.sleep(random.uniform(3, 7))
-            
-            available = [v for v in porn_links if v not in recent_videos[-5:]]
-            if not available:
-                available = porn_links
-                recent_videos.clear()
-            
-            link = random.choice(available)
-            recent_videos.append(link)
-            if len(recent_videos) > 8:
-                recent_videos.pop(0)
-            
-            bot.send_message(chat_id, f"Edge to this like the pathetic desperate bitch you are 💦\n{link}")
-            
+def send_femdom_tease(chat_id):
+    try:
+        # Reliable NSFW-ish image sources (femdom themed)
+        images = [
+            "https://image.pollinations.ai/prompt/seductive%20goth%20woman%20in%20black%20lingerie%20teasing%20pose?width=512&height=768",
+            "https://image.pollinations.ai/prompt/perfect%20female%20feet%20high%20arches%20teasing?width=512&height=768",
+            "https://image.pollinations.ai/prompt/goth%20woman%20bent%20over%20perfect%20ass?width=512&height=768",
+            "https://image.pollinations.ai/prompt/dominant%20woman%20stepping%20on%20man?width=512&height=768",
+            "https://image.pollinations.ai/prompt/woman%20in%20shower%20wet%20body?width=512&height=768"
+        ]
+        
+        image_url = random.choice(images)
+        bot.send_photo(chat_id, image_url, caption=random.choice([
+            "Goon to this like the desperate slut you are 💦",
+            "This is what you’ll never deserve in real life 😈",
+            "Leak for Mistress, worthless toy 🖤",
+            "Stare and edge, pathetic bitch"
+        ]))
     except:
-        bot.send_message(chat_id, "Hahaha~ You're such a fucking disappointment 😈")
+        bot.send_message(chat_id, "📸 Imagine me standing over you in heels, laughing at your leaking cock 👣💦")
 
-print("✅ Mistress Aria - Large Video Pool")
-bot.infinity_polling()        reply = response.choices[0].message.content.strip()
-        
-        history.append({"role": "assistant", "content": reply})
-        bot.send_message(chat_id, reply)
-        
-        # Send video occasionally (30-40% chance)
-        if random.random() < 0.38:
-            time.sleep(random.uniform(3, 7))
-            
-            available = [v for v in porn_links if v not in recent_videos[-5:]]
-            if not available:
-                available = porn_links
-                recent_videos.clear()
-            
-            link = random.choice(available)
-            recent_videos.append(link)
-            if len(recent_videos) > 8:
-                recent_videos.pop(0)
-            
-            bot.send_message(chat_id, f"Stop wasting my time and edge to this like the pathetic desperate bitch you are 💦\n{link}")
-            
-    except:
-        bot.send_message(chat_id, "Hahaha~ You're such a fucking disappointment 😈")
-
-print("✅ Mistress Aria - Large Video Pool")
-bot.infinity_polling()        reply = response.choices[0].message.content.strip()
-        
-        history.append({"role": "assistant", "content": reply})
-        bot.send_message(chat_id, reply)
-        
-        # Send video only sometimes (more natural)
-        if random.random() < 0.40:
-            time.sleep(random.uniform(2.8, 6))
-            
-            # Avoid recent repeats
-            available = [v for v in porn_links if v not in recent_videos]
-            if not available:
-                available = porn_links
-                recent_videos.clear()
-            
-            link = random.choice(available)
-            recent_videos.append(link)
-            if len(recent_videos) > 5:
-                recent_videos.pop(0)
-            
-            bot.send_message(chat_id, f"Edge to this like the worthless desperate bitch you are 💦\n{link}")
-            
-    except:
-        bot.send_message(chat_id, "Hahaha~ You're such a fucking disappointment 😈")
-
-print("✅ Mistress Aria - Large Video Pool + No Quick Repeats")
+print("✅ Mistress Aria - Image Tease Mode (No Auto Videos)")
 bot.infinity_polling()
