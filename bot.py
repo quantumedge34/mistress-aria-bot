@@ -20,7 +20,7 @@ Strict rules:
 - Every message has at least 1 emoji
 - Maximum 2 sentences per message
 - Be very descriptive and degrading
-- Never describe images in brackets like [photo]
+- Never describe images in brackets
 - Occasionally send real teasing femdom photos"""
 
 @bot.message_handler(func=lambda m: True)
@@ -39,4 +39,40 @@ def handle(message):
     
     try:
         response = client.chat.completions.create(
-           
+            model="llama-3.3-70b-versatile",
+            messages=[{"role": "system", "content": SYSTEM_PROMPT}] + history,
+            temperature=0.9,
+            max_tokens=230
+        )
+        reply = response.choices[0].message.content.strip()
+        
+        history.append({"role": "assistant", "content": reply})
+        bot.send_message(chat_id, reply)
+        
+        # Occasionally send real photo
+        if random.random() < 0.45:
+            time.sleep(random.uniform(2.5, 6))
+            send_tease_photo(chat_id)
+            
+    except:
+        bot.send_message(chat_id, "Hahaha~ You're so fucking pathetic 😈")
+
+def send_tease_photo(chat_id):
+    try:
+        prompts = [
+            "seductive goth woman in black lingerie teasing pose curvy body",
+            "perfect female feet high arches soft soles dark red toenails",
+            "goth woman bent over showing perfect ass in tiny thong",
+            "wet naked goth woman in shower water running down body",
+            "dominant goth woman stepping on submissive man"
+        ]
+        
+        prompt = random.choice(prompts)
+        image_url = f"https://image.pollinations.ai/prompt/{prompt.replace(' ', '%20')}?width=512&height=768&nologo=true"
+        
+        bot.send_photo(chat_id, image_url, caption="💦")
+    except:
+        pass
+
+print("✅ Mistress Aria - Clean Version")
+bot.infinity_polling()
